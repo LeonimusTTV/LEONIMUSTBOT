@@ -1,13 +1,14 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const bdd = require("./item.json");
 
 const fs = require("fs");
 
-client.login(process.env.TOKEN);
+client.login("NzA1NDgwMTg4NjI0MTA5NjYw.XqsToA.wXrNdNGPUkjQpXjY7r06U_hptsk");
 
 client.commands = new Discord.Collection();
 
-client.on("guildMemberAdd", async member2 => {
+/*client.on("guildMemberAdd", async member2 => {
     let bienvenu = member2.guild.channels.cache.find(x => x.name === "👐bienvenue👐")
 
     let embedindex = new Discord.MessageEmbed()
@@ -19,9 +20,9 @@ client.on("guildMemberAdd", async member2 => {
     member2.createDM().then(channel => {
         bienvenu.send(embedindex)
     }).catch(console.error)
-})
+})*/
 
-client.on("guildMemberRemove", async memberr => {
+/*client.on("guildMemberRemove", async memberr => {
     let bienvenu = memberr.guild.channels.cache.find(x => x.name === "👐au-revoire👐")
 
     let embedindexr = new Discord.MessageEmbed()
@@ -33,13 +34,14 @@ client.on("guildMemberRemove", async memberr => {
     memberr.createDM().then(channel => {
         bienvenu.send(embedindexr)
     }).catch(console.error)
-})
+})*/
 
 fs.readdir("./Commandes/", (error, f) => {
     if(error) console.log(error);
 
     let commandes = f.filter(f => f.split(".").pop() === "js");
     if(commandes.length <= 0) return console.log("Aucune commande trouvée !");
+
 
     commandes.forEach((f) => {
 
@@ -49,6 +51,33 @@ fs.readdir("./Commandes/", (error, f) => {
     client.commands.set(commande.help.name, commande);
     });
 });
+
+client.on("message", message => {
+    if(message.content.startsWith("l!setitemrl")){
+        message.delete()
+        if(message.member.hasPermission('MANAGE_MESSAGES')){
+            if(message.content.length > 5){
+                message_item = message.content.slice(12)
+                bdd["message-item"] = message_item
+                SaveItem()
+            }
+        }
+    }
+
+    if(message.content.startsWith("l!item")){
+        if(bdd["message-item"]){
+            message.channel.send(bdd["message-item"]);
+        }else{
+
+        }
+    }
+})
+
+function SaveItem(){
+    fs.writeFile("./item.json", JSON.stringify(bdd, null, 4), (err) => {
+        if(err) message.channel.send("Une erreur est survenue.");
+    });
+}
 
 fs.readdir("./Events/", (error, f) => {
     if(error) console.log(error);

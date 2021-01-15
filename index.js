@@ -4,7 +4,7 @@ const bdd = require("./item.json");
 
 const fs = require("fs");
 
-client.login("NzA1NDgwMTg4NjI0MTA5NjYw.XqsToA.wXrNdNGPUkjQpXjY7r06U_hptsk");
+client.login(process.env.TOKEN);
 
 client.commands = new Discord.Collection();
 

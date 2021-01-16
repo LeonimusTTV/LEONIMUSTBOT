@@ -6,7 +6,7 @@ const moment = require("moment");
 
 const fs = require("fs");
 
-client.login("NzA1NDgwMTg4NjI0MTA5NjYw.XqsToA.tT1EZpzjuaGsZ9QVeUR6O2jCkAo");
+client.login(process.env.TOKEN);
 
 client.commands = new Discord.Collection();
 

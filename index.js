@@ -1,10 +1,12 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const bdd = require("./item.json");
+const Canvas = require('canvas');
+const moment = require("moment");
 
 const fs = require("fs");
 
-client.login(process.env.TOKEN);
+client.login("NzA1NDgwMTg4NjI0MTA5NjYw.XqsToA.tT1EZpzjuaGsZ9QVeUR6O2jCkAo");
 
 client.commands = new Discord.Collection();
 
@@ -35,6 +37,35 @@ client.commands = new Discord.Collection();
         bienvenu.send(embedindexr)
     }).catch(console.error)
 })*/
+
+client.on("guildMemberAdd", async member => {
+
+    let user = member;
+    const canvas = Canvas.createCanvas(700, 250);
+    const ctx = canvas.getContext(`2d`);
+
+    const background = await Canvas.loadImage(`./wallpaper.jpg`);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+    ctx.font = `40px Calvert MT Std`;
+    ctx.fillStyle = `#ffffff`;
+
+    ctx.fillText(user.user.username, canvas.width / 2.2, canvas.height / 1.7);
+    ctx.fillText((user.user.bot ? '🤖' : '🙎‍♂️'), canvas.width / 1.1, canvas.height / 4.2)
+    ctx.fillText((moment(user.user.createdAt).format('DD/MM/YYYY')), canvas.width / 1.5, canvas.height / 1.05)
+
+    ctx.beginPath();
+    ctx.arc(125, 125, 100, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.clip();
+    const avatar = await Canvas.loadImage(user.user.displayAvatarURL({ format: 'png' }))
+    ctx.drawImage(avatar, 25, 25, 200, 200);
+
+    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), './Welcome.jpg');
+
+
+    client.channels.cache.get('800067651346366465').send(attachment);
+})
 
 fs.readdir("./Commandes/", (error, f) => {
     if(error) console.log(error);

@@ -9,5 +9,5 @@ module.exports.run = async(client, message, args) => {
 
 
 module.exports.help = {
-    name: "leonardoami"
+    name: "leonardo_ami"
 }
